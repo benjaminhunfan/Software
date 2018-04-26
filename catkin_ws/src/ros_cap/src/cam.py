@@ -23,8 +23,8 @@ class Controller(object):
 		except CvBridgeError as e:
 			print (e)
 
-		lower_yellow = np.array([21, 86, 172])
-		upper_yellow = np.array([43, 255, 255])
+		lower_yellow = np.array([30, 86, 172])
+		upper_yellow = np.array([61, 255, 255])
 
 		mask = cv2.inRange(cv_image, lower_yellow, upper_yellow)
 		kernel = np.ones((5,5),np.uint8)
@@ -37,11 +37,13 @@ class Controller(object):
 
 		#print 'number of contours', len(contours)
 		if len(contours)>0:
-			max_index = np.argmax(areas)
-			cnt = contours[max_index]
-			x,y,w,h= cv2.boundingRect(cnt)
+			for c in contours:
+				#max_index = np.argmax(areas)
+				#cnt = contours[max_index]
+				cnt = c
+				x,y,w,h= cv2.boundingRect(cnt)
 
-			cv2.rectangle(cv_image, (x,y), (x+w,y+h), (0,255,0),2)
+				cv2.rectangle(cv_image, (x,y), (x+w,y+h), (0,255,0),2)
 
 		image_out = cv2.cvtColor(cv_image, cv2.COLOR_BGR2HSV)
 		image_out= cv2.bitwise_and(cv_image, cv_image, mask= mask)
